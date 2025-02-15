@@ -31,14 +31,38 @@ function fetchEmployees() {
 
 // TODO
 // add event listener to submit button
+const employeeForm = document.getElementById('employeeForm')
+employeeForm.addEventListener('submit',createEmployee)
 
 // TODO
 // add event listener to delete button
 
 // TODO
-function createEmployee (){
+function createEmployee (event){
+  event.preventDefault();
   // get data from input field
+  const stdname = document.getElementById('name').value
+  const stdid = document.getElementById('id').value
+  //Employee Object
+  const Employee={
+    name:stdname,
+    id:stdid,
+  }
   // send data to BE
+  fetch('http://localhost:3000/api/v1/employee', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(Employee)
+    })
+      .then(response => response.json())
+        .then(()=>{
+          document.getElementById("name").value = ''
+          document.getElementById("id").value = ''
+          fetchEmployees()
+        })
+          .catch(error => console.error(error))
   // call fetchEmployees
 }
 
