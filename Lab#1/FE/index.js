@@ -1,35 +1,35 @@
 function fetchEmployees() {
   fetch('http://localhost:3000/api/v1/employee')
-    .then(response => response.json())
-    .then(data => {
-      const tableBody = document.getElementById('dataTable')
-      tableBody.innerHTML = ''
-      const list = data.data
-      list.forEach(item => {
-        const row = document.createElement('tr')
-        const idCell = document.createElement('td')
-        idCell.textContent = item.id
-        row.appendChild(idCell)
+  .then(response => response.json())
+  .then(data => {
+    const tableBody = document.getElementById('dataTable')
+    tableBody.innerHTML = ''
+    const list = data.data
+    list.forEach(item => {
+      const row = document.createElement('tr')
+      const idCell = document.createElement('td')
+      idCell.textContent = item.id
+      row.appendChild(idCell)
 
-        const nameCell = document.createElement('td')
-        nameCell.textContent = item.name
-        row.appendChild(nameCell)
+      const nameCell = document.createElement('td')
+      nameCell.textContent = item.name
+      row.appendChild(nameCell)
 
-        const deleteCell = document.createElement('td')
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete';
-        deleteButton.classList.add('btn', 'btn-danger', 'btn-sm');
-        deleteButton.addEventListener('click', () => {
-          deleteEmployee(item.id)
-        });
-        deleteCell.appendChild(deleteButton);
+      const deleteCell = document.createElement('td')
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = 'Delete';
+      deleteButton.classList.add('btn', 'btn-danger', 'btn-sm');
+      deleteButton.addEventListener('click', () => {
+        deleteEmployee(item.id)
+      });
+      deleteCell.appendChild(deleteButton);
 
-        row.appendChild(deleteCell)
+      row.appendChild(deleteCell)
 
-        tableBody.appendChild(row)
-      })
+      tableBody.appendChild(row)
     })
-    .catch(error => console.error(error))
+  })
+  .catch(error => console.error(error))
 }
 
 // TODO
@@ -39,6 +39,7 @@ employeeForm.addEventListener('submit',createEmployee)
 
 // TODO
 // add event listener to delete button
+//done in fetch
 
 // TODO
 function createEmployee (event){
@@ -70,28 +71,22 @@ function createEmployee (event){
 }
 
 // TODO
-function deleteEmployee (){
-
+function deleteEmployee(id) {
   if (!confirm('Are you sure you want to delete this employee?')) {
     return;
   }
-  // get id
-  const empID = id
-  // send id to BE
-  fetch(`http://localhost:4000/api/v1/employee/${empID}`, {
+
+  fetch(`http://localhost:3000/api/v1/employee/${id}`, { 
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      }
-      })
-      .then(response => response.json())
-      .then(() => {
-        document.getElementById("id").value=''
-        fetchEmployees()
-        })
-        .catch(error => console.error(error))
-  
-  // call fetchEmployees
+    },
+  })
+    .then(response => response.json())
+    .then(() => {
+      fetchEmployees(); 
+    })
+    .catch(error => console.error(error));
 }
 
 fetchEmployees()
