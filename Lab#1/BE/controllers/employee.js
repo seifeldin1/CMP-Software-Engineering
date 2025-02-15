@@ -8,6 +8,13 @@ exports.getEmployees = async (req, res, next) => {
 
 // TODO
 exports.deleteEmployee = async (req, res, next) => {
+  const id = req.params.id
+  const deleteEmploye = employee.find((employee)=>employee.id==id)
+  if(!deleteEmploye)
+    return res.status(404).json({ message: 'Employee not found' });
+
+  employee.splice(employee.indexOf(deleteEmploye), 1);
+  return res.status(201).json({message: "Employee removed successfully"})
 };
 
 // TODO

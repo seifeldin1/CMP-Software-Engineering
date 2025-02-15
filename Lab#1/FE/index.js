@@ -19,6 +19,9 @@ function fetchEmployees() {
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Delete';
         deleteButton.classList.add('btn', 'btn-danger', 'btn-sm');
+        deleteButton.addEventListener('click', () => {
+          deleteEmployee(item.id)
+        });
         deleteCell.appendChild(deleteButton);
 
         row.appendChild(deleteCell)
@@ -68,8 +71,26 @@ function createEmployee (event){
 
 // TODO
 function deleteEmployee (){
+
+  if (!confirm('Are you sure you want to delete this employee?')) {
+    return;
+  }
   // get id
+  const empID = id
   // send id to BE
+  fetch(`http://localhost:4000/api/v1/employee/${empID}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      }
+      })
+      .then(response => response.json())
+      .then(() => {
+        document.getElementById("id").value=''
+        fetchEmployees()
+        })
+        .catch(error => console.error(error))
+  
   // call fetchEmployees
 }
 
